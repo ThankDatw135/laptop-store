@@ -1,0 +1,236 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// USER
+// ============================================================
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  password     String    // bcrypt hashed
+  name         String
+  phone        String?
+  avatar       String?   // Cloudinary URL
+  role         Role      @default(USER)
+  refreshToken String?   @db.Text // lưu refresh token hiện tại
+
+  addresses    Address[]
+  orders       Order[]
+  reviews      Review[]
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([email])
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// ============================================================
+// PRODUCT
+// ============================================================
+model Product {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  name          String
+  description   String        @db.Text
+  metaTitle     String?
+  metaDescription String?
+  price         Int           // VNĐ integer
+  originalPrice Int
+  category      Category
+  brand         String
+  specs         Json          // { cpu, gpu, ram, storage, display... }
+  stock         Int           @default(0)
+  status        ProductStatus @default(DRAFT)
+  viewCount     Int           @default(0)
+  soldCount     Int           @default(0)
+
+  images        ProductImage[]
+  reviews       Review[]
+  orderItems    OrderItem[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([category])
+  @@index([brand])
+  @@index([price])
+  @@index([status])
+  @@index([soldCount])
+  @@index([createdAt])
+  @@map("products")
+}
+
+enum Category {
+  gaming
+  office
+  student
+  workstation
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+}
+
+// ============================================================
+// PRODUCT IMAGE
+// ============================================================
+model ProductImage {
+  id           String  @id @default(cuid())
+  productId    String
+  url          String  // Cloudinary URL
+  publicId     String  // Cloudinary publicId (để delete)
+  isHero       Boolean @default(false)
+  displayOrder Int     @default(0)
+
+  product      Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([isHero])
+  @@map("product_images")
+}
+
+// ============================================================
+// ORDER
+// ============================================================
+model Order {
+  id            String        @id @default(cuid())
+  userId        String?       // null nếu guest checkout
+  guestEmail    String?
+  guestPhone    String?
+  status        OrderStatus   @default(PENDING)
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(PENDING)
+  subtotal      Int           // Tổng tiền hàng (VNĐ)
+  shippingFee   Int           @default(0)
+  totalAmount   Int           // subtotal + shippingFee
+
+  // Shipping address (snapshot, không FK vào Address)
+  recipientName  String
+  recipientPhone String
+  province       String
+  district       String
+  ward           String
+  addressDetail  String
+  note           String?      @db.Text
+
+  items         OrderItem[]
+  user          User?         @relation(fields: [userId], references: [id])
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  MOMO
+  VNPAY
+  ZALOPAY
+  COD
+  INSTALLMENT
+  BANK_TRANSFER
+}
+
+// ============================================================
+// ORDER ITEM
+// ============================================================
+model OrderItem {
+  id                   String  @id @default(cuid())
+  orderId              String
+  productId            String
+  quantity             Int
+  price                Int     // Snapshot giá lúc mua (VNĐ)
+  productNameSnapshot  String  // Tên sản phẩm lúc mua
+  productImageSnapshot String  // URL ảnh lúc mua
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+// ============================================================
+// REVIEW
+// ============================================================
+model Review {
+  id                 String   @id @default(cuid())
+  productId          String
+  userId             String
+  rating             Int      // 1-5
+  title              String?
+  content            String   @db.Text
+  images             Json     @default("[]") // JSON array of Cloudinary URLs
+  isVerifiedPurchase Boolean  @default(false)
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([userId])
+  @@index([rating])
+  @@map("reviews")
+}
+
+// ============================================================
+// ADDRESS
+// ============================================================
+model Address {
+  id            String  @id @default(cuid())
+  userId        String
+  recipientName String
+  phone         String
+  province      String
+  district      String
+  ward          String
+  detail        String
+  isDefault     Boolean @default(false)
+
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isDefault])
+  @@map("addresses")
+}

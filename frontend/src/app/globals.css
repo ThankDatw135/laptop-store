@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* 
+  Laptop Store - Global CSS
+  Tailwind v4 Configuration via @theme 
+*/
+
+@theme {
+  --font-sans: var(--font-be-vietnam-pro);
+  
+  /* Brand colors */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  
+  /* Background colors */
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+
+  /* Text colors */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  
+  /* Border colors */
+  --color-border-base: var(--border-base);
+}
+
+/* ============================================================
+   THEME VARIABLES
+   ============================================================ */
+
+/* Theme: Gaming (Dark Mode) - Default */
+:root {
+  --brand-primary: #e50914; /* Red gaming */
+  --brand-secondary: #0088cc; /* Blue gaming */
+  
+  --bg-base: #0f0f13;
+  --bg-surface: #1a1a20;
+  --bg-elevated: #25252d;
+
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+
+  --border-base: #27272a;
+}
+
+/* Theme: Office (Light Mode) */
+.theme-office {
+  --brand-primary: #0070f3; /* Professional blue */
+  --brand-secondary: #0051a8;
+  
+  --bg-base: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+
+  --border-base: #e2e8f0;
+}
+
+/* ============================================================
+   GLOBAL STYLES
+   ============================================================ */
+
+@layer base {
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+  }
+}

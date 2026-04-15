@@ -1,0 +1,20 @@
+{
+  "name": "laptop-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website bán laptop văn phòng & gaming tại Việt Nam",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:db\" \"npm run dev:be\" \"npm run dev:fe\" --names \"db,be,fe\" --prefix-colors \"blue,yellow,green\"",
+    "dev:fe": "cd frontend && npm run dev",
+    "dev:be": "cd backend && npm run dev",
+    "dev:db": "cd docker && docker compose up -d",
+    "db:stop": "cd docker && docker compose down",
+    "db:reset": "cd docker && docker compose down -v && docker compose up -d",
+    "build:fe": "cd frontend && npm run build",
+    "build:be": "cd backend && npm run build",
+    "install:all": "npm install && cd shared && npm install && cd ../frontend && npm install && cd ../backend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
