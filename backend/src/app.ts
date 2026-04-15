@@ -7,6 +7,7 @@ import { globalRateLimiter } from './middleware/rateLimiter'
 import { errorHandler } from './middleware/errorHandler'
 import { sendError } from './lib/response'
 import healthRouter from './routes/health.routes'
+import authRouter from './routes/auth.routes'
 
 const app = express()
 
@@ -41,15 +42,11 @@ app.use(globalRateLimiter)
 // ============================================================
 
 // Health check
-app.get('/health', (req, res) => {
-  const healthRouter = require('./routes/health.routes').default
-  healthRouter(req, res)
-})
 app.use('/health', healthRouter)
 app.use('/api', healthRouter) // /api/ping
 
-// TODO Phase 2: Auth routes
-// app.use('/api/auth', authRateLimiter, authRouter)
+// Phase 2: Auth routes (rate limiter nằm trong router)
+app.use('/api/auth', authRouter)
 
 // TODO Phase 3: Product routes
 // app.use('/api/products', productRouter)
