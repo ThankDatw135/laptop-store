@@ -1,0 +1,98 @@
+import { Product, ProductListItem } from '@shared/types/product.types';
+
+export const mockProducts: Product[] = [
+  {
+    id: '1',
+    slug: 'asus-rog-strix-g15',
+    name: 'ASUS ROG Strix G15 (2025)',
+    description: 'Laptop gaming đỉnh cao với thiết kế đẹp mắt.',
+    price: 35000000,
+    originalPrice: 38000000,
+    category: 'gaming',
+    brand: 'ASUS',
+    specs: {
+      cpu: 'Intel Core i7 13700H',
+      gpu: 'RTX 4060 8GB',
+      ram: '16GB DDR5',
+      storage: '512GB SSD PCIe NVMe',
+      displaySize: '15.6"',
+      displayResolution: 'FHD (1920x1080)',
+      displayRefresh: '144Hz',
+      displayPanel: 'IPS',
+      weight: '2.1 kg',
+      os: 'Windows 11 Home',
+    },
+    images: [
+      {
+        id: 'img1',
+        url: 'https://cdn.tgdd.vn/Products/Images/44/307174/asus-tuf-gaming-f15-fx507zc4-i5-hn074w-thumb-600x600.jpg',
+        publicId: 'dummy',
+        isHero: true,
+        displayOrder: 1,
+      }
+    ],
+    stock: 10,
+    status: 'ACTIVE',
+    viewCount: 1500,
+    soldCount: 30,
+    averageRating: 4.8,
+    reviewCount: 15,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: '2',
+    slug: 'dell-xps-13-plus',
+    name: 'Dell XPS 13 Plus',
+    description: 'Laptop văn phòng mỏng nhẹ sang trọng bậc nhất.',
+    price: 45000000,
+    originalPrice: 48000000,
+    category: 'office',
+    brand: 'Dell',
+    specs: {
+      cpu: 'Intel Core i7 1360P',
+      gpu: 'Intel Iris Xe',
+      ram: '16GB LPDDR5',
+      storage: '1TB SSD PCIe NVMe',
+      displaySize: '13.4"',
+      displayResolution: '3.5K OLED',
+      displayRefresh: '60Hz',
+      displayPanel: 'OLED',
+      weight: '1.24 kg',
+      os: 'Windows 11 Home',
+    },
+    images: [
+      {
+        id: 'img2',
+        url: 'https://cdn.tgdd.vn/Products/Images/44/308304/dell-inspiron-15-3520-i5-25w4w1-thumb-600x600.jpg',
+        publicId: 'dummy2',
+        isHero: true,
+        displayOrder: 1,
+      }
+    ],
+    stock: 5,
+    status: 'ACTIVE',
+    viewCount: 2100,
+    soldCount: 50,
+    averageRating: 4.9,
+    reviewCount: 42,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+];
+
+export const mockProductListItems: ProductListItem[] = mockProducts.map((p) => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.name,
+  price: p.price,
+  originalPrice: p.originalPrice,
+  category: p.category,
+  brand: p.brand,
+  images: p.images,
+  stock: p.stock,
+  averageRating: p.averageRating,
+  reviewCount: p.reviewCount,
+  soldCount: p.soldCount,
+  status: p.status,
+}));

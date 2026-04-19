@@ -8,6 +8,9 @@ import { errorHandler } from './middleware/errorHandler'
 import { sendError } from './lib/response'
 import healthRouter from './routes/health.routes'
 import authRouter from './routes/auth.routes'
+import productRouter from './routes/products.routes'
+import categoryRouter from './routes/categories.routes'
+import uploadRouter from './routes/upload.routes'
 
 const app = express()
 
@@ -48,10 +51,10 @@ app.use('/api', healthRouter) // /api/ping
 // Phase 2: Auth routes (rate limiter nằm trong router)
 app.use('/api/auth', authRouter)
 
-// TODO Phase 3: Product routes
-// app.use('/api/products', productRouter)
-// app.use('/api/categories', categoryRouter)
-// app.use('/api/upload', authenticate, authorize('ADMIN'), uploadRouter)
+// Phase 3: Product routes
+app.use('/api/products', productRouter)
+app.use('/api/categories', categoryRouter)
+app.use('/api/upload', uploadRouter)
 
 // TODO Phase 4: Order routes
 // app.use('/api/orders', orderRouter)
