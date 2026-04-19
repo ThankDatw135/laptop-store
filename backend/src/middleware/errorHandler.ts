@@ -58,6 +58,15 @@ export function errorHandler(
     return
   }
 
+  // Custom application errors thrown from services
+  if ('statusCode' in err) {
+    const customErr = err as Error & { statusCode?: number; code?: string }
+    const status = customErr.statusCode || 500
+    const code = customErr.code || ERROR_CODES.INTERNAL_ERROR
+    sendError(res, status, err.message, code)
+    return
+  }
+
   // Default: Internal Server Error
   sendError(res, 500, 'Đã xảy ra lỗi, vui lòng thử lại sau', ERROR_CODES.INTERNAL_ERROR)
 }

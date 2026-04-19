@@ -1,4 +1,4 @@
-version: '3.9'
+name: laptop-store
 
 services:
   mysql:
@@ -11,7 +11,7 @@ services:
       MYSQL_USER: ${MYSQL_USER:-laptop_user}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-laptop_pass}
     ports:
-      - '${MYSQL_PORT:-3306}:3306'
+      - '${MYSQL_PORT:-3307}:3306'
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
